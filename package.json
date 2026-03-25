@@ -1,0 +1,38 @@
+{
+	"name": "freshpublish",
+	"version": "0.0.0",
+	"description": "Cleaning script before publish",
+	"type": "module",
+	"bin": "./src/cli.js",
+	"scripts": {
+		"prepack": "node ./src/cli.js --debug",
+		"format": "prettier -w .",
+		"test": "node --test",
+		"types": "tsc --noEmit"
+	},
+	"files": [
+		"src"
+	],
+	"keywords": [
+		"clean",
+		"fresh",
+		"package",
+		"publish"
+	],
+	"author": "Hyper-Z11 (https://github.com/hyperz111)",
+	"license": "MIT",
+	"repository": "https://github.com/hyperz111/freshpublish.git",
+	"packageManager": "pnpm@10.15.0",
+	"devDependencies": {
+		"@hyperz111/prettier-config": "^1.0.3",
+		"@hyperz111/tsconfig": "^1.0.0",
+		"prettier": "^3.6.2",
+		"typescript": "^5.9.2"
+	},
+	"engines": {
+		"node": ">= 22"
+	},
+	"freshpublish": {
+		"cleanDocs": true
+	}
+}

@@ -3,7 +3,7 @@
 /**
  * Clean `README.md` and add a link to the full documentation.
  * @param {string} content README content
- * @param {{ repository?: Object | string, homepage?: string }} packageJson package.json content
+ * @param {{ repository?: { url?: string } | string, homepage?: string }} packageJson package.json content
  * @returns {string}
  */
 export const cleanDocs = (content, packageJson) => {
@@ -25,9 +25,7 @@ export const cleanDocs = (content, packageJson) => {
 		}
 	}
 
-	const cleaned = [content.split(/\n##\s*\w/m)[0], "## Docs", `Read full docs **[here](${url})**.`, ""];
-
-	return cleaned.join("\n");
+	return [content.split(/\n##\s*\w/m)[0], "## Docs", `Read full docs **[here](${url})**.`, ""].join("\n");
 };
 
 /**
@@ -39,23 +37,19 @@ const isObject = (value) => Boolean(value) && typeof value === "object";
 /**
  * @param {*} object
  * @param {Array<string>} keys
- * @returns {boolean}
+ * @returns {void}
  */
 const deleteProperty = (object, keys) => {
-	if (!isObject(object)) {
-		return false;
+	if (isObject(object)) {
+		const key = keys.shift();
+		if (key !== undefined) {
+			if (keys.length === 0) {
+				delete object[key];
+			} else {
+				deleteProperty(object[key], keys);
+			}
+		}
 	}
-
-	const key = keys.shift();
-	if (key === undefined) {
-		return false;
-	}
-
-	if (keys.length === 0) {
-		return delete object[key];
-	}
-
-	return deleteProperty(object[key], keys);
 };
 
 const IGNORE_FIELDS = [

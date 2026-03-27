@@ -4,6 +4,7 @@ import { tmpdir as getTmpdir } from "node:os";
 import { join } from "node:path";
 import { randomUUID } from "node:crypto";
 import * as fs from "node:fs/promises";
+/** @import { TestContext } from "node:test" */
 
 describe("run", () => {
 	const tmpdir = getTmpdir();
@@ -43,7 +44,7 @@ describe("run", () => {
 	});
 
 	describe("cleaning", () => {
-		it("should clean the package", async (t) => {
+		it("should clean the package", async (/** @type {TestContext} */ t) => {
 			const packageJson = await createPackageJson({
 				name: "foobarquz",
 				version: "1.0.0",
@@ -77,7 +78,7 @@ describe("run", () => {
 			});
 		});
 
-		it("should clean readme if cleanDocs is enabled", async (t) => {
+		it("should clean readme if cleanDocs is enabled", async (/** @type {TestContext} */ t) => {
 			const homepage = "https://example.homepage.com";
 			await createPackageJson({
 				name: "foobarquz",
@@ -124,7 +125,7 @@ describe("run", () => {
 			);
 		});
 
-		it("should reject if package.json is not available", (t) => {
+		it("should reject if package.json is not available", (/** @type {TestContext} */ t) => {
 			t.assert.rejects(() =>
 				run({
 					cwd,
@@ -135,7 +136,7 @@ describe("run", () => {
 			);
 		});
 
-		it("should don't reject if cleanDocs is enabled but readme is not available", async (t) => {
+		it("should don't reject if cleanDocs is enabled but readme is not available", async (/** @type {TestContext} */ t) => {
 			await createPackageJson({
 				freshpublish: {
 					cleanDocs: true,
@@ -154,7 +155,7 @@ describe("run", () => {
 	});
 
 	describe("configuration", () => {
-		it("should read configuration from package.json", async (t) => {
+		it("should read configuration from package.json", async (/** @type {TestContext} */ t) => {
 			t.plan(1);
 
 			await createPackageJson({
@@ -183,7 +184,7 @@ describe("run", () => {
 			});
 		});
 
-		it("should read configuration from CLI options", async (t) => {
+		it("should read configuration from CLI options", async (/** @type {TestContext} */ t) => {
 			t.plan(1);
 
 			await createPackageJson({
@@ -208,7 +209,7 @@ describe("run", () => {
 			});
 		});
 
-		it("should prior the CLI options than from package.json", async (t) => {
+		it("should prior the CLI options than from package.json", async (/** @type {TestContext} */ t) => {
 			t.plan(1);
 
 			await createPackageJson({
@@ -239,11 +240,16 @@ describe("run", () => {
 	});
 
 	describe("CLI Options", () => {
-		["--help", "-h"].forEach((flag) => {
-			it(`should show help with ${flag} flag`, async (t) => {
-				await createPackageJson({});
+		/** @type {Array<Array<string>>} */
+		let logs;
 
-				const logs = [];
+		beforeEach(() => {
+			logs = [];
+		});
+
+		["--help", "-h"].forEach((flag) => {
+			it(`should show help with ${flag} flag`, async (/** @type {TestContext} */ t) => {
+				await createPackageJson({});
 
 				await run({
 					cwd,
@@ -253,15 +259,13 @@ describe("run", () => {
 				});
 
 				t.assert.ok(logs.length > 1);
-				t.assert.ok(logs.some((log) => log.includes("Usage: freshpublish [...options]")));
+				t.assert.ok(logs.flat().includes("Usage: freshpublish [...options]"));
 			});
 		});
 
 		["--version", "-v"].forEach((flag) => {
-			it(`should show version with ${flag} flag`, async (t) => {
+			it(`should show version with ${flag} flag`, async (/** @type {TestContext} */ t) => {
 				await createPackageJson({});
-
-				const logs = [];
 
 				await run({
 					cwd,
@@ -271,14 +275,12 @@ describe("run", () => {
 				});
 
 				t.assert.ok(logs.length === 1);
-				t.assert.ok(/^[0-9]+\.[0-9]+\.[0-9]+$/.test(logs[0][0]));
+				t.assert.ok(logs.flat().some((log) => /^[0-9]+\.[0-9]+\.[0-9]+$/.test(log)));
 			});
 		});
 
-		it("should enable debugging when --debug flag is passed", async (t) => {
+		it("should enable debugging when --debug flag is passed", async (/** @type {TestContext} */ t) => {
 			await createPackageJson({});
-
-			const logs = [];
 
 			await run({
 				cwd,

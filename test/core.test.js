@@ -1,5 +1,6 @@
 import { cleanDocs, clearPackageJson } from "../src/core.js";
 import { describe, it } from "node:test";
+/** @import { TestContext } from "node:test" */
 
 describe("cleanDocs", () => {
 	const readme = [
@@ -19,7 +20,7 @@ describe("cleanDocs", () => {
 		"",
 	].join("\n");
 
-	it("should clean readme", (t) => {
+	it("should clean readme", (/** @type {TestContext} */ t) => {
 		const packageJson = {
 			homepage: "https://example.homepage.com",
 			repository: "organization/package",
@@ -30,9 +31,13 @@ describe("cleanDocs", () => {
 	});
 
 	describe("documentation link", () => {
+		/**
+		 * @param {string} url
+		 * @returns {RegExp}
+		 */
 		const createLinkRegex = (url) => new RegExp(`\\*\\*\\[here\\]\\(${url}\\)\\*\\*`);
 
-		it("should use homepage url if available", (t) => {
+		it("should use homepage url if available", (/** @type {TestContext} */ t) => {
 			const packageJson = {
 				homepage: "https://example.homepage.com",
 				repository: "organization/package",
@@ -42,7 +47,7 @@ describe("cleanDocs", () => {
 			t.assert.ok(createLinkRegex(packageJson.homepage).test(cleaned));
 		});
 
-		it("should use repository url if homepage url is not available", (t) => {
+		it("should use repository url if homepage url is not available", (/** @type {TestContext} */ t) => {
 			const packageJson = {
 				repository: "https://github.com/organization/package",
 			};
@@ -51,7 +56,7 @@ describe("cleanDocs", () => {
 			t.assert.ok(createLinkRegex(packageJson.repository).test(cleaned));
 		});
 
-		it("should support shorthand url as GitHub url", (t) => {
+		it("should support shorthand url as GitHub url", (/** @type {TestContext} */ t) => {
 			const packageJson = {
 				repository: "organization/package",
 			};
@@ -60,7 +65,7 @@ describe("cleanDocs", () => {
 			t.assert.ok(createLinkRegex(`https://github.com/${packageJson.repository}#readme`).test(cleaned));
 		});
 
-		it("should support repository object", (t) => {
+		it("should support repository object", (/** @type {TestContext} */ t) => {
 			const packageJson = {
 				repository: { url: "https://github.com/organization/package" },
 			};
@@ -72,7 +77,7 @@ describe("cleanDocs", () => {
 });
 
 describe("clearPackageJson", () => {
-	it("should clean the package.json object", (t) => {
+	it("should clean the package.json object", (/** @type {TestContext} */ t) => {
 		const packageJson = {
 			name: "foobar",
 			version: "1.0.0",
@@ -99,7 +104,7 @@ describe("clearPackageJson", () => {
 		});
 	});
 
-	it("should support additional ignore fields", (t) => {
+	it("should support additional ignore fields", (/** @type {TestContext} */ t) => {
 		const packageJson = {
 			name: "barquz",
 			version: "3.7.0",

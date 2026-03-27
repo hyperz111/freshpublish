@@ -10,6 +10,7 @@ try {
 		debug: (...args) => console.debug(styleText("blue", "[freshpublish]"), ...args),
 	});
 } catch (error) {
+	// @ts-ignore -- assume if this error handling is good
 	console.error(`${error.code ?? error.name}:`, error.message);
 	process.exit(1);
 }

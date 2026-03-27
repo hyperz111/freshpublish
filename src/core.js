@@ -94,7 +94,7 @@ const NPM_SCRIPTS = [
 
 /**
  * Clean `package.json` content.
- * @param {Object} packageJson package.json content
+ * @param {Record<string, any>} packageJson package.json content
  * @param {Array<string>} [inputIgnoreFields] List of fields that you want to delete
  * @returns {Object}
  */

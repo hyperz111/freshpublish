@@ -24,7 +24,7 @@
 	"repository": "https://github.com/hyperz111/freshpublish.git",
 	"packageManager": "pnpm@10.15.0",
 	"devDependencies": {
-		"@hyperz111/prettier-config": "^1.0.3",
+		"@hyperz111/prettier-config": "^1.1.0",
 		"@hyperz111/tsconfig": "^1.0.0",
 		"@types/node": "^25.5.0",
 		"prettier": "^3.6.2",
